@@ -58,3 +58,47 @@ class GetCurrentAudioCommand(GetAudioSettingsCommand):
                 return int(itm.value)
 
         return 0
+      
+class GetPictureSettingsCommand(GetSettingsCommandBase):
+    @property
+    def _url(self):
+        return "/picture/picture_mode/"
+
+
+    def process_response(self, json_obj):
+        return self._get_items(json_obj)
+
+
+class GetCurrentPictureModeCommand(GetPictureSettingsCommand):
+    def process_response(self, json_obj):
+        items = super().process_response(json_obj)
+        for itm in items:
+            if itm.c_name.lower() == CNames.Picture.MODE:
+                return itm
+
+        return 0
+    
+
+class GetPictureModesCommand(GetPictureSettingsCommand):
+    def process_response(self, json_obj):
+        items = super().process_response(json_obj)
+        for itm in items:
+            if itm.c_name.lower() == CNames.Picture.MODE:
+                return itm.options
+
+        return 0
+
+
+class SetCurrentPictureMode(CommandBase):
+    @property
+    def _url(self):
+        return "/menu_native/dynamic/tv_settings/picture/picture_mode"
+
+    def __init__(self, id_, name):
+        self.VALUE = str(name)
+        # noinspection SpellCheckingInspection
+        self.HASHVAL = int(id_)
+        self.REQUEST = ProtoConstants.ACTION_MODIFY
+
+    def process_response(self, json_obj):
+        return True

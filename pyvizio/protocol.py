@@ -77,6 +77,9 @@ class KeyCodes(object):
 class CNames(object):
     class Audio(object):
         VOLUME = "volume"
+    
+    class Picture(object):
+        MODE = "picture_mode"
 
 
 def get_json_obj(json_obj, key):

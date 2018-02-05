@@ -8,7 +8,7 @@ from .cmd_input import GetInputsListCommand, GetCurrentInputCommand, ChangeInput
 from .cmd_pair import BeginPairCommand, CancelPairCommand, PairChallengeCommand
 from .cmd_power import GetPowerStateCommand
 from .cmd_remote import EmulateRemoteCommand
-from .cmd_settings import GetCurrentAudioCommand
+from .cmd_settings import GetCurrentAudioCommand, GetCurrentPictureModeCommand, GetPictureModesCommand, SetCurrentPictureMode
 from .discovery import discover
 from .protocol import invoke_api, invoke_api_auth, KeyCodes
 
@@ -79,6 +79,16 @@ class Vizio(object):
 
     def pair(self, ch_type, token, pin):
         return self.__invoke_api(PairChallengeCommand(self._device_id, ch_type, token, pin))
+    
+    def get_picture_modes(self):
+        return self.__invoke_api_auth(GetPictureModesCommand())
+
+    def get_current_picture_mode(self):
+        return self.__invoke_api_auth(GetCurrentPictureModeCommand())
+    
+    def set_current_picture_mode(self, name):
+        current = self.__invoke_api_auth(GetCurrentPictureModeCommand())
+        return self.__invoke_api_auth(SetCurrentPictureMode(current.id, name))
 
     def get_inputs(self):
         return self.__invoke_api_auth(GetInputsListCommand())
