@@ -8,7 +8,8 @@ from .cmd_input import GetInputsListCommand, GetCurrentInputCommand, ChangeInput
 from .cmd_pair import BeginPairCommand, CancelPairCommand, PairChallengeCommand
 from .cmd_power import GetPowerStateCommand
 from .cmd_remote import EmulateRemoteCommand
-from .cmd_settings import GetCurrentAudioCommand, GetCurrentPictureModeCommand, GetPictureModesCommand, SetCurrentPictureMode
+from .cmd_settings import (GetCurrentAudioCommand, GetCurrentPictureModeCommand, GetPictureModesCommand, 
+                           SetCurrentPictureMode, GetCurrentTimerCommand, GetTimerOptionsCommand, SetCurrentTimer)
 from .discovery import discover
 from .protocol import invoke_api, invoke_api_auth, KeyCodes
 
@@ -90,6 +91,16 @@ class Vizio(object):
         current = self.__invoke_api_auth(GetCurrentPictureModeCommand())
         return self.__invoke_api_auth(SetCurrentPictureMode(current.id, name))
 
+    def get_sleep_timers(self):
+        return self.__invoke_api_auth(GetTimerOptionsCommand())
+
+    def get_current_timer(self):
+        return self.__invoke_api_auth(GetCurrentTimerCommand())
+
+    def set_sleep_timer(self, name):
+        current = self.__invoke_api_auth(GetCurrentTimerCommand())
+        return self.__invoke_api_auth(SetCurrentTimer(current.id, name))
+    
     def get_inputs(self):
         return self.__invoke_api_auth(GetInputsListCommand())
 

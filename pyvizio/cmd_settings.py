@@ -102,3 +102,47 @@ class SetCurrentPictureMode(CommandBase):
 
     def process_response(self, json_obj):
         return True
+
+
+class GetTimerSettingsCommand(GetSettingsCommandBase):
+    @property
+    def _url(self):
+        return "/timers"
+
+    def process_response(self, json_obj):
+        return self._get_items(json_obj)
+
+
+class GetCurrentTimerCommand(GetTimerSettingsCommand):
+    def process_response(self, json_obj):
+        items = super().process_response(json_obj)
+        for itm in items:
+            if itm.c_name.lower() == CNames.Timers.SLEEP:
+                return itm
+
+        return 0
+
+
+class GetTimerOptionsCommand(GetTimerSettingsCommand):
+    def process_response(self, json_obj):
+        items = super().process_response(json_obj)
+        for itm in items:
+            if itm.c_name.lower() == CNames.Timers.SLEEP:
+                return itm.options
+
+        return 0
+
+
+class SetCurrentTimer(CommandBase):
+    @property
+    def _url(self):
+        return "/menu_native/dynamic/tv_settings/timers/sleep_timer"
+
+    def __init__(self, id_, name):
+        self.VALUE = str(name)
+        # noinspection SpellCheckingInspection
+        self.HASHVAL = int(id_)
+        self.REQUEST = ProtoConstants.ACTION_MODIFY
+
+    def process_response(self, json_obj):
+        return True

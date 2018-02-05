@@ -80,7 +80,9 @@ class CNames(object):
     
     class Picture(object):
         MODE = "picture_mode"
-
+      
+    class Timers(object):
+        SLEEP = "sleep_timer"
 
 def get_json_obj(json_obj, key):
     key = key.lower()
