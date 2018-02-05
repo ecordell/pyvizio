@@ -86,6 +86,29 @@ def input_get(vizio):
         return
     _LOGGER.info(data.meta_name)
 
+@cli.command()
+@pass_tv
+def picture_mode_list(vizio):
+    modes = vizio.get_picture_modes()
+    if modes is None:
+        return
+    _LOGGER.info(modes)
+    
+@cli.command()
+@pass_tv
+def picture_mode_get(vizio):
+    data = vizio.get_current_picture_mode()
+    if data is None:
+        return
+    _LOGGER.info(data.value)
+    
+@cli.command()
+@click.argument("name", required=True)
+@pass_tv
+def picture_mode_set(vizio, name):
+    result = vizio.set_current_picture_mode(name)
+    _LOGGER.info("OK" if result else "ERROR")
+
 
 @cli.command()
 @click.argument("state", required=False)
