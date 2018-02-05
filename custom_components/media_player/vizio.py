@@ -14,6 +14,7 @@ from homeassistant.components.media_player import (
     SUPPORT_NEXT_TRACK,
     SUPPORT_VOLUME_MUTE,
     SUPPORT_VOLUME_STEP,
+    SUPPORT_VOLUME_SET,
     MediaPlayerDevice
 )
 from homeassistant.const import (
@@ -39,7 +40,7 @@ MIN_TIME_BETWEEN_SCANS = timedelta(seconds=10)
 MIN_TIME_BETWEEN_FORCED_SCANS = timedelta(seconds=1)
 SUPPORTED_COMMANDS = SUPPORT_TURN_ON | SUPPORT_TURN_OFF | SUPPORT_SELECT_SOURCE \
                      | SUPPORT_NEXT_TRACK | SUPPORT_PREVIOUS_TRACK \
-                     | SUPPORT_VOLUME_MUTE | SUPPORT_VOLUME_STEP
+                     | SUPPORT_VOLUME_MUTE | SUPPORT_VOLUME_STEP | SUPPORT_VOLUME_SET 
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Required(CONF_HOST): cv.string,
@@ -143,3 +144,7 @@ class VizioDevice(MediaPlayerDevice):
 
     def volume_down(self):
         self._device.vol_down()
+
+    def set_volume_level(self, volume):
+        # vizio uses 0..100, input is 0..1
+        self._device.vol_set(int(100*volume))
