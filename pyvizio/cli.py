@@ -134,6 +134,14 @@ def volume(vizio, state, amount):
 @pass_tv
 def volume_current(vizio):
     _LOGGER.info("Current volume: %s", vizio.get_current_volume())
+    
+    
+@cli.command()
+@click.argument("level", required=True)
+@pass_tv
+def volume_set(vizio, level):
+    result = vizio.vol_set(int(level))
+    _LOGGER.info("OK" if result else "ERROR")
 
 
 @cli.command()
