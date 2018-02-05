@@ -109,6 +109,28 @@ def picture_mode_set(vizio, name):
     result = vizio.set_current_picture_mode(name)
     _LOGGER.info("OK" if result else "ERROR")
 
+@cli.command()
+@pass_tv
+def timers_list(vizio):
+    timers = vizio.get_sleep_timers()
+    if timers is None:
+        return
+    _LOGGER.info(timers)
+
+@cli.command()
+@pass_tv
+def timer_get(vizio):
+    data = vizio.get_current_timer()
+    if data is None:
+        return
+    _LOGGER.info(data.value)
+
+@cli.command()
+@click.argument("name", required=True)
+@pass_tv
+def timer_set(vizio, name):
+    result = vizio.set_sleep_timer(name)
+    _LOGGER.info("OK" if result else "ERROR")
 
 @cli.command()
 @click.argument("state", required=False)
