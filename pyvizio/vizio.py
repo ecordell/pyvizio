@@ -104,6 +104,19 @@ class Vizio(object):
     def vol_down(self, num=1):
         return self.__remote_multiple(KeyCodes.VOL_DOWN, num)
 
+    def vol_set(self, desired):
+        if desired < 0:
+            desired = 0
+        if desired > 100:
+            desired = 100
+        
+        current = self.get_current_volume()
+        
+        if desired > current:
+            return self.vol_up(desired - current)
+        else:
+            return self.vol_down(current - desired)
+
     def get_current_volume(self):
         return self.__invoke_api_auth(GetCurrentAudioCommand())
 
